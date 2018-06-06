@@ -7,8 +7,12 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import store from '@/store'
+import AlertComponent from './components/General/Alert.vue'
+import CongratulationsComponent from './components/General/Congratulations.vue'
 
 Vue.use(Vuetify)
+Vue.component('app-alert', AlertComponent)
+Vue.component('app-congratulations', CongratulationsComponent)
 
 Vue.config.productionTip = false
 
