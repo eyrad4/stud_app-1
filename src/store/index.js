@@ -27,10 +27,10 @@ const Store = new Vuex.Store({
     },
     setUser (store, params) {
       console.log(params)
-      store.user.token = (params.token) ? params.token : ''
-      store.user.role = (params.userRole) ? params.userRole : ''
-      store.user.login = (params.userLogin) ? params.userLogin : ''
-      store.user.id = (params.userId) ? params.userId : ''
+      store.user.token = params.token
+      store.user.role = params.userRole
+      store.user.login = params.userLogin
+      store.user.id = params.userId
     }
   },
   actions: {
@@ -81,6 +81,29 @@ const Store = new Vuex.Store({
           localStorage.removeItem('userId')
           localStorage.removeItem('userLogin')
           commit('setError', 'Login or password wrong...')
+        })
+    },
+    logout ({commit}) {
+      axios.post(HTTP + 'logout', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Auth': this.state.user.token
+        }
+      })
+        .then(function (response) {
+          if (response.status === 200) {
+            localStorage.removeItem('userToken')
+            localStorage.removeItem('userRole')
+            localStorage.removeItem('userId')
+            localStorage.removeItem('userLogin')
+            commit('setUser', {token: '', userRole: '', userLogin: '', userId: ''})
+          }
+        })
+        .catch(function (error) {
+          localStorage.removeItem('userToken')
+          localStorage.removeItem('userRole')
+          localStorage.removeItem('userId')
+          localStorage.removeItem('userLogin')
         })
     },
     userInfo ({commit}) {

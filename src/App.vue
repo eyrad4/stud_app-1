@@ -115,7 +115,8 @@ export default {
   },
   methods: {
     onLogout () {
-      console.log('logout')
+      this.$store.dispatch('logout')
+      this.$router.push('/')
     }
   }
 }
