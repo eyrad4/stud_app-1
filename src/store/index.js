@@ -1,55 +1,63 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   state: {
-    addsList: [
-      {
-        id: '1',
-        name: 'test1'
-      },
-      {
-        id: '2',
-        name: 'test2'
-      },
-      {
-        id: '3',
-        name: 'test3'
-      }
-    ],
-    addItem: {}
+    error: null,
+    congratulations: null,
+    user: {
+      token: '',
+      role: '',
+      login: '',
+      id: ''
+    }
   },
   mutations: {
-    updateAddsList (state, data) {
-      state.addsList = data
+    setError (state, params) {
+      state.error = params
     },
-    updateAddItem (state, data) {
-      state.addItem = data
+    clearError (state) {
+      state.error = null
+    },
+    setCongratulations (state, params) {
+      state.congratulations = params
     }
   },
   actions: {
-    setList (context, params) {
-      context.commit('updateAddsList', params.data)
-    },
-    loadById (context, params) {
-      context.state.addsList.forEach(item => {
-        if (item.id === params.id) {
-          let editedItem = {}
-          Object.assign(editedItem, item)
-          context.commit('updateAddItem', editedItem)
+    signUp ({commit}, params) {
+      commit('clearError')
+      let data = JSON.stringify({
+        name: params.name,
+        login: params.email,
+        password: params.password
+      })
+      axios.post('http://api.studapp.mm/register', data, {
+        headers: {
+          'Content-Type': 'application/json'
         }
       })
+        .then(function (response) {
+          if (response.status === 200) {
+            commit('setCongratulations', {title: 'Congratulations', text: 'Now you can Sign In!'})
+          }
+        })
+        .catch(function (error) {
+          commit('setError', 'Error, maybe user already exist, or else...')
+        })
     },
-    save (context, params) {
-      context.state.addsList.forEach(item => {
-        if (item.id === params.item.id) {
-          item.name = params.item.name
-        }
-      })
-
-      context.commit('updateAddsList', context.state.addsList)
+    clearError ({commit}) {
+      commit('clearError')
+    }
+  },
+  getters: {
+    error (state) {
+      return state.error
+    },
+    congratulations (state) {
+      return state.congratulations
     }
   }
 })

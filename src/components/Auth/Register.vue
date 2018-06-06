@@ -5,7 +5,17 @@
         <h1>Sign up</h1>
       </v-flex>
     </v-layout>
-    <v-layout row>
+    <v-layout row v-if="congratulations">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-congratulations @dismissed="onDismissed" :title="congratulations.title" :text="congratulations.text"></app-congratulations>
+      </v-flex>
+    </v-layout>
+    <v-layout row v-if="error">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="onDismissed" :text="error"></app-alert>
+      </v-flex>
+    </v-layout>
+    <v-layout row v-if="!congratulations">
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
@@ -84,9 +94,24 @@ export default {
     },
     passwordRules () {
       return v => (v === '') ? 'This field is required' : (v.length >= 1 && v.length < 6) ? 'Enter at least 6 symbol' : true
+    },
+    error () {
+      return this.$store.getters.error
+    },
+    congratulations () {
+      return this.$store.getters.congratulations
     }
   },
-  methods: {}
+  methods: {
+    onSignUp () {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('signUp', {name: this.name, email: this.email, password: this.password})
+      }
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError', {})
+    }
+  }
 }
 </script>
 
