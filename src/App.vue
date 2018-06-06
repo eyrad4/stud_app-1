@@ -28,6 +28,8 @@
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
         <v-list-tile
+          v-if="userInfo.token"
+          @click="onLogout"
         >
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
@@ -58,6 +60,8 @@
         </v-btn>
         <v-btn
           flat
+          v-if="userInfo.token"
+          @click="onLogout"
         >
           <v-icon left>exit_to_app</v-icon>
           Logout
@@ -76,6 +80,9 @@
 
 <script>
 export default {
+  beforeCreate () {
+    this.$store.dispatch('userInfo', {})
+  },
   name: 'App',
   components: {
   },
@@ -87,15 +94,29 @@ export default {
     menuItems () {
       let menuItems = [
         { icon: 'face', title: 'Sign up', link: 'register' },
-        { icon: 'lock_open', title: 'Sign in', link: 'login' },
-        { icon: 'add', title: 'Add ads', link: 'new' },
-        { icon: 'folder', title: 'All categories', link: 'lists' },
-        { icon: 'person', title: 'Profile admin', link: 'admin' }
+        { icon: 'lock_open', title: 'Sign in', link: 'login' }
       ]
+      if (this.userInfo.token !== null && this.userInfo.token !== '') {
+        menuItems = [
+          { icon: 'add', title: 'Add ads', link: 'new' },
+          { icon: 'folder', title: 'All categories', link: 'lists' }
+        ]
+        if (this.userInfo.role === 'admin') {
+          menuItems.push({ icon: 'person', title: 'Profile admin', link: 'admin' })
+        } else {
+          menuItems.push({ icon: 'person', title: 'Profile user', link: 'profile' })
+        }
+      }
       return menuItems
+    },
+    userInfo () {
+      return this.$store.getters.userInfo
     }
   },
   methods: {
+    onLogout () {
+      console.log('logout')
+    }
   }
 }
 </script>

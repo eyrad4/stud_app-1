@@ -5,6 +5,11 @@
         <h1>Sign in</h1>
       </v-flex>
     </v-layout>
+    <v-layout row v-if="error">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="onDismissed" :text="error"></app-alert>
+      </v-flex>
+    </v-layout>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -53,8 +58,20 @@ export default {
     },
     passwordRules () {
       return v => (v === '') ? 'This field is required' : (v.length >= 1 && v.length < 6) ? 'Enter at least 6 symbol' : true
+    },
+    error () {
+      return this.$store.getters.error
     }
   },
-  methods: {}
+  methods: {
+    onSignIn () {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('signIn', {email: this.email, password: this.password})
+      }
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError', {})
+    }
+  }
 }
 </script>

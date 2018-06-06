@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
-
+const HTTP = 'http://api.studapp.mm/'
 const Store = new Vuex.Store({
   state: {
     error: null,
@@ -24,6 +24,13 @@ const Store = new Vuex.Store({
     },
     setCongratulations (state, params) {
       state.congratulations = params
+    },
+    setUser (store, params) {
+      console.log(params)
+      store.user.token = (params.token) ? params.token : ''
+      store.user.role = (params.userRole) ? params.userRole : ''
+      store.user.login = (params.userLogin) ? params.userLogin : ''
+      store.user.id = (params.userId) ? params.userId : ''
     }
   },
   actions: {
@@ -34,7 +41,7 @@ const Store = new Vuex.Store({
         login: params.email,
         password: params.password
       })
-      axios.post('http://api.studapp.mm/register', data, {
+      axios.post(HTTP + 'register', data, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -48,6 +55,43 @@ const Store = new Vuex.Store({
           commit('setError', 'Error, maybe user already exist, or else...')
         })
     },
+    signIn ({commit}, params) {
+      let data = JSON.stringify({
+        login: params.email,
+        password: params.password
+      })
+      axios.post(HTTP + 'login', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(function (response) {
+          if (response.status === 200) {
+            console.log('все ок сохраняем в стор')
+            commit('setUser', response.data)
+            localStorage.setItem('userToken', response.data.token)
+            localStorage.setItem('userRole', response.data.userRole.name)
+            localStorage.setItem('userId', response.data.userId)
+            localStorage.setItem('userLogin', response.data.userLogin)
+          }
+        })
+        .catch(function (error) {
+          localStorage.removeItem('userToken')
+          localStorage.removeItem('userRole')
+          localStorage.removeItem('userId')
+          localStorage.removeItem('userLogin')
+          commit('setError', 'Login or password wrong...')
+        })
+    },
+    userInfo ({commit}) {
+      let data = {
+        token: (localStorage.getItem('userToken')) ? localStorage.getItem('userToken') : '',
+        userRole: (localStorage.getItem('userRole')) ? localStorage.getItem('userRole') : '',
+        userLogin: (localStorage.getItem('userLogin')) ? localStorage.getItem('userLogin') : '',
+        userId: (localStorage.getItem('userId')) ? localStorage.getItem('userId') : ''
+      }
+      commit('setUser', data)
+    },
     clearError ({commit}) {
       commit('clearError')
     }
@@ -58,6 +102,9 @@ const Store = new Vuex.Store({
     },
     congratulations (state) {
       return state.congratulations
+    },
+    userInfo (state) {
+      return state.user
     }
   }
 })
