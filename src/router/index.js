@@ -6,8 +6,18 @@ import Register from '@/components/Auth/Register'
 import SingleAdd from '@/components/SingleAdd'
 import AddForm from '@/components/AddForm'
 import Page404 from '@/components/Page404'
+import store from '../store'
 
 Vue.use(Router)
+
+const checkAuth = (to, from, next) => {
+  let userInfo = store.getters.userInfo
+  if (userInfo.token) {
+    next()
+  } else {
+    next('/login')
+  }
+}
 
 export default new Router({
   routes: [
@@ -27,14 +37,15 @@ export default new Router({
       component: Register
     },
     {
-      path: '/add:id(\\d+)',
+      path: '/ad/:id(\\d+)',
       name: 'SingleAdd',
       component: SingleAdd
     },
     {
-      path: '/:id(\\d+)',
+      path: '/new',
       name: 'AddForm',
-      component: AddForm
+      component: AddForm,
+      beforeEnter: checkAuth
     },
     {
       path: '*',
