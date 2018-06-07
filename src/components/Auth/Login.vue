@@ -5,17 +5,17 @@
         <h1>Sign in</h1>
       </v-flex>
     </v-layout>
-    <v-layout row v-if="error">
+    <v-layout row v-if="alert">
       <v-flex xs12 sm6 offset-sm3>
-        <app-alert @dismissed="onDismissed" :text="error"></app-alert>
+        <app-alert @dismissed="dismissed" :alertType="alert.alertType" :title="alert.title" :text="alert.text"></app-alert>
       </v-flex>
     </v-layout>
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm6 offset-sm3 v-if="!success">
         <v-card>
           <v-card-text>
             <v-container>
-              <v-form ref="form" @submit.prevent="onSignIn" v-model="valid" lazy-validation>
+              <v-form ref="form" @submit.prevent="signIn" v-model="valid" lazy-validation>
                 <v-text-field
                   label="E-mail"
                   name="email"
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data: () => ({
     valid: true,
@@ -59,18 +60,19 @@ export default {
     passwordRules () {
       return v => (v === '') ? 'This field is required' : (v.length >= 1 && v.length < 6) ? 'Enter at least 6 symbol' : true
     },
-    error () {
-      return this.$store.getters.error
-    }
+    ...mapState({
+      alert: 'alert',
+      success: 'success'
+    })
   },
   methods: {
-    onSignIn () {
+    signIn () {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('signIn', {email: this.email, password: this.password})
       }
     },
-    onDismissed () {
-      this.$store.dispatch('clearError', {})
+    dismissed () {
+      this.$store.dispatch('clearAlert')
     }
   }
 }
