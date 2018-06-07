@@ -8,7 +8,7 @@
         <v-list>
           <v-list-tile>
             <v-list-tile-title class="title">
-              <router-link to="/" tag="span" style="cursor: pointer">
+              <router-link to="/" tag="span" class="cursor-pointer">
                 {{ siteName }}
               </router-link>
             </v-list-tile-title>
@@ -19,7 +19,7 @@
       <v-list dense class="pt-0">
         <v-list-tile
           v-for="item in menuItems"
-          :key="item.title"
+          :key="item.id"
           :to="item.link"
         >
           <v-list-tile-action>
@@ -29,7 +29,7 @@
         </v-list-tile>
         <v-list-tile
           v-if="userInfo.token"
-          @click="onLogout"
+          @click="logout"
         >
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
@@ -43,7 +43,7 @@
         @click.native.stop="sideNav = !sideNav"
         class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link to="/" tag="span" style="cursor: pointer">
+        <router-link to="/" tag="span" class="cursor-pointer">
           {{ siteName }}
         </router-link>
       </v-toolbar-title>
@@ -52,7 +52,7 @@
         <v-btn
           flat
           v-for="item in menuItems"
-          :key="item.title"
+          :key="item.id"
           :to="item.link"
         >
           <v-icon left>{{ item.icon }}</v-icon>
@@ -61,7 +61,7 @@
         <v-btn
           flat
           v-if="userInfo.token"
-          @click="onLogout"
+          @click="logout"
         >
           <v-icon left>exit_to_app</v-icon>
           Logout
@@ -79,10 +79,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  beforeCreate () {
-    this.$store.dispatch('userInfo', {})
-  },
   name: 'App',
   components: {
   },
@@ -93,28 +91,28 @@ export default {
   computed: {
     menuItems () {
       let menuItems = [
-        { icon: 'face', title: 'Sign up', link: 'register' },
-        { icon: 'lock_open', title: 'Sign in', link: 'login' }
+        { id: 1, icon: 'face', title: 'Sign up', link: 'register' },
+        { id: 2, icon: 'lock_open', title: 'Sign in', link: 'login' }
       ]
       if (this.userInfo.token !== null && this.userInfo.token !== '') {
         menuItems = [
-          { icon: 'add', title: 'Add ads', link: 'new' },
-          { icon: 'folder', title: 'All categories', link: 'lists' }
+          { id: 3, icon: 'add', title: 'Add ads', link: 'new' },
+          { id: 4, icon: 'folder', title: 'All categories', link: 'lists' }
         ]
         if (this.userInfo.role === 'admin') {
-          menuItems.push({ icon: 'person', title: 'Profile admin', link: 'admin' })
+          menuItems.push({ id: 5, icon: 'person', title: 'Profile admin', link: 'admin' })
         } else {
-          menuItems.push({ icon: 'person', title: 'Profile user', link: 'profile' })
+          menuItems.push({ id: 6, icon: 'person', title: 'Profile user', link: 'profile' })
         }
       }
       return menuItems
     },
-    userInfo () {
-      return this.$store.getters.userInfo
-    }
+    ...mapState({
+      userInfo: 'user'
+    })
   },
   methods: {
-    onLogout () {
+    logout () {
       this.$store.dispatch('logout')
       this.$router.push('/')
     }
