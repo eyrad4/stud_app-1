@@ -2,132 +2,121 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+import API from './api'
+
 Vue.use(Vuex)
-const HTTP = 'http://api.studapp.mm/'
+
+const axiosHeaders = {
+  basic: {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  },
+  auth: {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Auth': localStorage.getItem('userToken')
+    }
+  }
+}
+
 const Store = new Vuex.Store({
   state: {
-    error: null,
-    congratulations: null,
+    alert: null,
+    success: false,
     user: {
-      token: '',
-      role: '',
-      login: '',
-      id: ''
+      token: (localStorage.getItem('userToken')) ? localStorage.getItem('userToken') : '',
+      role: (localStorage.getItem('userRole')) ? localStorage.getItem('userRole') : '',
+      login: (localStorage.getItem('userLogin')) ? localStorage.getItem('userLogin') : '',
+      id: (localStorage.getItem('userId')) ? localStorage.getItem('userId') : ''
     }
   },
   mutations: {
-    setError (state, params) {
-      state.error = params
+    setAlert (state, params) {
+      state.alert = params
     },
-    clearError (state) {
-      state.error = null
+    clearAlert (state) {
+      state.alert = null
     },
-    setCongratulations (state, params) {
-      state.congratulations = params
+    setSuccess (state) {
+      state.success = true
     },
     setUser (store, params) {
-      console.log(params)
-      store.user.token = params.token
-      store.user.role = params.userRole
-      store.user.login = params.userLogin
-      store.user.id = params.userId
+      store.user = {
+        token: params.token,
+        role: params.userRole.name,
+        login: params.userLogin,
+        id: params.userId
+      }
+      localStorage.setItem('userToken', params.token)
+      localStorage.setItem('userRole', params.userRole.name)
+      localStorage.setItem('userId', params.userId)
+      localStorage.setItem('userLogin', params.userLogin)
+    },
+    claerUser (store) {
+      store.user = {
+        token: '',
+        role: '',
+        login: '',
+        id: ''
+      }
+      localStorage.removeItem('userToken')
+      localStorage.removeItem('userRole')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('userLogin')
     }
   },
   actions: {
     signUp ({commit}, params) {
-      commit('clearError')
-      let data = JSON.stringify({
+      commit('clearAlert')
+      let data = {
         name: params.name,
         login: params.email,
         password: params.password
-      })
-      axios.post(HTTP + 'register', data, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      }
+      axios.post(API.signup, data, axiosHeaders.basic)
         .then(function (response) {
           if (response.status === 200) {
-            commit('setCongratulations', {title: 'Congratulations', text: 'Now you can Sign In!'})
+            commit('setAlert', {alertType: 'success', title: 'Congratulations', text: 'Now you can Sign In!'})
+            commit('setSuccess')
           }
         })
         .catch(function (error) {
-          commit('setError', 'Error, maybe user already exist, or else...')
+          commit('setAlert', {alertType: 'error', title: 'Error', text: 'Maybe user already exist, or else...'})
         })
     },
     signIn ({commit}, params) {
-      let data = JSON.stringify({
+      commit('clearAlert')
+      let data = {
         login: params.email,
         password: params.password
-      })
-      axios.post(HTTP + 'login', data, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      }
+      axios.post(API.signin, data, axiosHeaders.basic)
         .then(function (response) {
           if (response.status === 200) {
-            console.log('все ок сохраняем в стор')
             commit('setUser', response.data)
-            localStorage.setItem('userToken', response.data.token)
-            localStorage.setItem('userRole', response.data.userRole.name)
-            localStorage.setItem('userId', response.data.userId)
-            localStorage.setItem('userLogin', response.data.userLogin)
+            commit('setAlert', {alertType: 'success', title: 'Congratulations', text: 'You are logged!'})
+            commit('setSuccess')
           }
         })
         .catch(function (error) {
-          localStorage.removeItem('userToken')
-          localStorage.removeItem('userRole')
-          localStorage.removeItem('userId')
-          localStorage.removeItem('userLogin')
-          commit('setError', 'Login or password wrong...')
+          commit('claerUser')
+          commit('setAlert', {alertType: 'error', title: 'Error', text: 'Login or password wrong...'})
         })
     },
     logout ({commit}) {
-      axios.post(HTTP + 'logout', {}, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Auth': this.state.user.token
-        }
-      })
+      axios.post(API.logout, {id: this.state.user.id}, axiosHeaders.basic)
         .then(function (response) {
           if (response.status === 200) {
-            localStorage.removeItem('userToken')
-            localStorage.removeItem('userRole')
-            localStorage.removeItem('userId')
-            localStorage.removeItem('userLogin')
-            commit('setUser', {token: '', userRole: '', userLogin: '', userId: ''})
+            commit('claerUser')
           }
         })
         .catch(function (error) {
-          localStorage.removeItem('userToken')
-          localStorage.removeItem('userRole')
-          localStorage.removeItem('userId')
-          localStorage.removeItem('userLogin')
+          commit('claerUser')
         })
     },
-    userInfo ({commit}) {
-      let data = {
-        token: (localStorage.getItem('userToken')) ? localStorage.getItem('userToken') : '',
-        userRole: (localStorage.getItem('userRole')) ? localStorage.getItem('userRole') : '',
-        userLogin: (localStorage.getItem('userLogin')) ? localStorage.getItem('userLogin') : '',
-        userId: (localStorage.getItem('userId')) ? localStorage.getItem('userId') : ''
-      }
-      commit('setUser', data)
-    },
-    clearError ({commit}) {
-      commit('clearError')
-    }
-  },
-  getters: {
-    error (state) {
-      return state.error
-    },
-    congratulations (state) {
-      return state.congratulations
-    },
-    userInfo (state) {
-      return state.user
+    clearAlert ({commit}) {
+      commit('clearAlert')
     }
   }
 })
