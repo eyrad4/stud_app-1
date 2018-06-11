@@ -91,18 +91,18 @@ export default {
   computed: {
     menuItems () {
       let menuItems = [
-        { id: 1, icon: 'face', title: 'Sign up', link: 'register' },
-        { id: 2, icon: 'lock_open', title: 'Sign in', link: 'login' }
+        { id: 1, icon: 'face', title: 'Sign up', link: '/register' },
+        { id: 2, icon: 'lock_open', title: 'Sign in', link: '/login' }
       ]
       if (this.userInfo.token !== null && this.userInfo.token !== '') {
         menuItems = [
-          { id: 3, icon: 'add', title: 'Add ads', link: 'new' },
-          { id: 4, icon: 'folder', title: 'All categories', link: 'lists' }
+          { id: 3, icon: 'add', title: 'Add ads', link: '/new' },
+          { id: 4, icon: 'folder', title: 'All categories', link: '/all' }
         ]
         if (this.userInfo.role === 'admin') {
-          menuItems.push({ id: 5, icon: 'person', title: 'Profile admin', link: 'admin' })
+          menuItems.push({ id: 5, icon: 'person', title: 'Profile admin', link: '/admin' })
         } else {
-          menuItems.push({ id: 6, icon: 'person', title: 'Profile user', link: 'profile' })
+          menuItems.push({ id: 6, icon: 'person', title: 'Profile user', link: '/profile' })
         }
       }
       return menuItems
