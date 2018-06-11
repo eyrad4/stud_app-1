@@ -97,7 +97,7 @@ export default {
       if (this.userInfo.token !== null && this.userInfo.token !== '') {
         menuItems = [
           { id: 3, icon: 'add', title: 'Add ads', link: '/new' },
-          { id: 4, icon: 'folder', title: 'All categories', link: '/all' }
+          { id: 4, icon: 'folder', title: 'All categories', link: '/products' }
         ]
         if (this.userInfo.role === 'admin') {
           menuItems.push({ id: 5, icon: 'person', title: 'Profile admin', link: '/admin' })

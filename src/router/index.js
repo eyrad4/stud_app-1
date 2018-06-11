@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Auth/Login'
 import Register from '@/components/Auth/Register'
+import AllAds from '@/components/AllAds'
+import Category from '@/components/Category'
 import SingleAd from '@/components/SingleAd'
 import AddForm from '@/components/AddForm'
 import Page404 from '@/components/Page404'
@@ -35,7 +37,17 @@ export default new Router({
       component: Register
     },
     {
-      path: '/ad/:id(\\d+)',
+      path: '/products',
+      name: 'AllAds',
+      component: AllAds
+    },
+    {
+      path: '/products/:category(\\d+)',
+      name: 'Category',
+      component: Category
+    },
+    {
+      path: '/products/:category(\\d+)/:id(\\d+)',
       name: 'SingleAd',
       component: SingleAd
     },
