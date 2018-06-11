@@ -8,9 +8,11 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import store from '@/store'
 import AlertComponent from './components/General/Alert.vue'
+import CreateEditAd from './components/General/CreateEditAd.vue'
 
 Vue.use(Vuetify)
 Vue.component('app-alert', AlertComponent)
+Vue.component('app-create-edit-ad', CreateEditAd)
 
 Vue.config.productionTip = false
 
@@ -20,5 +22,8 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  created () {
+    this.$store.dispatch('dataConfig')
+  }
 })
