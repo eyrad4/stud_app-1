@@ -34,7 +34,8 @@ const Store = new Vuex.Store({
       cities: '',
       categories: '',
       adTypes: ''
-    }
+    },
+    ad: ''
   },
   mutations: {
     setAlert (state, params) {
@@ -76,6 +77,9 @@ const Store = new Vuex.Store({
         categories: Array.from(params.categories),
         adTypes: Array.from(params.adTypes)
       }
+    },
+    setAd (store, params) {
+      store.ad = params
     }
   },
   actions: {
@@ -176,6 +180,24 @@ const Store = new Vuex.Store({
             commit('setAlert', {alertType: 'error', title: 'Error', text: 'Something wrong...'})
           }
         })
+    },
+    getAd ({commit}, params) {
+      axios.get(API.showAd + params.id, {}, axiosHeaders.basic)
+        .then(function (response) {
+          if (response.status === 200) {
+            commit('setAd', response.data)
+          }
+        })
+    }
+  },
+  getters: {
+    loadAd (state) {
+      return (adId) => {
+        return state.adsList.find((ad) => {
+          console.log(adId)
+          return ad.id === adId
+        })
+      }
     }
   }
 })
