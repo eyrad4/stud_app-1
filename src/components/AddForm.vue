@@ -1,35 +1,41 @@
 <template>
-  <div class="form">
-    <h1>Editing add page: </h1>
-    <h3>Add Id: {{ $route.params.id }}</h3>
-    <input v-model="item.name"/>
-    <br /><br />
-    <button @click="save()">Save</button>
-     &nbsp;&nbsp;
-    <router-link :to="{name: 'AddsList'}">Cancel</router-link>
-  </div>
+  <v-container>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <h1>Add new ad</h1>
+      </v-flex>
+    </v-layout>
+    <v-layout row v-if="alert">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="dismissed" :alertType="alert.alertType" :title="alert.title" :text="alert.text"></app-alert>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3 v-if="!success">
+        <app-create-edit-ad
+          :dataConfig="dataConfig"
+        ></app-create-edit-ad>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-
 export default {
-  name: 'AddForm',
+  data: () => ({
+    success: false
+  }),
   computed: {
     ...mapState({
-      item: 'addItem'
+      dataConfig: 'dataConfig',
+      alert: 'alert'
     })
   },
   methods: {
-    save: function () {
-      this.$store.dispatch('save', {item: this.item})
-        .then(() => {
-          this.$router.push({name: 'AddsList'})
-        })
+    dismissed () {
+      this.$store.dispatch('clearAlert')
     }
-  },
-  created () {
-    this.$store.dispatch('loadById', {id: this.$route.params.id})
   }
 }
 </script>
