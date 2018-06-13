@@ -37,9 +37,19 @@ export default new Router({
       component: Register
     },
     {
-      path: '/ad/:id(\\d+)',
-      name: 'SingleAdd',
-      component: SingleAdd
+      path: '/products',
+      name: 'AllAds',
+      component: AllAds
+    },
+    {
+      path: '/products/:category(\\d+)',
+      name: 'Category',
+      component: Category
+    },
+    {
+      path: '/products/:category(\\d+)/:id(\\d+)',
+      name: 'SingleAd',
+      component: SingleAd
     },
     {
       path: '/new',
