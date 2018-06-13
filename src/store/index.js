@@ -88,6 +88,9 @@ const Store = new Vuex.Store({
     },
     setSort (store, params) {
       store.sort = params
+    },
+    setSearchResult (store, params) {
+      store.searchResult = params
     }
   },
   actions: {
@@ -228,6 +231,19 @@ const Store = new Vuex.Store({
         })
         .catch(function (error) {
           console.log(error)
+        })
+    },
+    search ({commit}, params) {
+      axios.get(API.search + params.search, {}, axiosHeaders.basic)
+        .then(function (response) {
+          if (response.status === 200) {
+            commit('setSearchResult', response.data)
+          }
+        })
+        .catch(function (error) {
+          if (error.status !== 200) {
+            console.log(error)
+          }
         })
     }
   }

@@ -11,12 +11,14 @@ import AlertComponent from './components/General/Alert.vue'
 import CreateEditAd from './components/General/CreateEditAd.vue'
 import AdsList from './components/General/AdsList.vue'
 import Sort from './components/General/Sort.vue'
+import Search from './components/General/Search.vue'
 
 Vue.use(Vuetify)
 Vue.component('app-alert', AlertComponent)
 Vue.component('app-create-edit-ad', CreateEditAd)
 Vue.component('app-adslist', AdsList)
 Vue.component('app-sort', Sort)
+Vue.component('app-search', Search)
 
 Vue.config.productionTip = false
 
