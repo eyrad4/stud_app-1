@@ -35,7 +35,8 @@ const Store = new Vuex.Store({
       categories: '',
       adTypes: ''
     },
-    ad: ''
+    ad: '',
+    adsList: ''
   },
   mutations: {
     setAlert (state, params) {
@@ -80,6 +81,9 @@ const Store = new Vuex.Store({
     },
     setAd (store, params) {
       store.ad = params
+    },
+    setAdsList (store, params) {
+      store.adsList = params
     }
   },
   actions: {
@@ -188,16 +192,39 @@ const Store = new Vuex.Store({
             commit('setAd', response.data)
           }
         })
-    }
-  },
-  getters: {
-    loadAd (state) {
-      return (adId) => {
-        return state.adsList.find((ad) => {
-          console.log(adId)
-          return ad.id === adId
+        .catch(function (error) {
+          if (error.status !== 200) {
+            console.log(error)
+          }
         })
+    },
+    getAdsList ({commit}, params) {
+      let data = {
+        params: {
+          sort: this.state.sort,
+          category: '',
+          limit: ''
+        }
       }
+      if (params) {
+        commit('setSort', params.sort)
+        data = {
+          params: {
+            sort: params.sort,
+            category: params.currentCategory,
+            limit: params.display
+          }
+        }
+      }
+      axios.get(API.adsList, data, axiosHeaders.basic)
+        .then(function (response) {
+          if (response.status === 200) {
+            commit('setAdsList', response.data)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 })
