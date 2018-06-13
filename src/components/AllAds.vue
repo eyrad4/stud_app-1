@@ -1,6 +1,13 @@
 <template>
   <v-container>
     <v-layout row>
+      <v-flex xs12 sm12 offset-sm3>
+        <v-container>
+          <app-search></app-search>
+        </v-container>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
       <v-flex  xs12 sm3>
         <v-container mb-5>
           <v-layout>
@@ -37,6 +44,9 @@
                 <v-layout row>
                   <v-flex xs12 sm10>
                     <div class="display-1 teal--text">All ads</div>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <app-sort></app-sort>
                   </v-flex>
                 </v-layout>
               </v-container>

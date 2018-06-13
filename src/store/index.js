@@ -36,7 +36,8 @@ const Store = new Vuex.Store({
       adTypes: ''
     },
     ad: '',
-    adsList: ''
+    adsList: '',
+    sort: 'Date DESC'
   },
   mutations: {
     setAlert (state, params) {
@@ -84,6 +85,9 @@ const Store = new Vuex.Store({
     },
     setAdsList (store, params) {
       store.adsList = params
+    },
+    setSort (store, params) {
+      store.sort = params
     }
   },
   actions: {
