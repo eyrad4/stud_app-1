@@ -6,3 +6,12 @@
 .cursor-pointer{
   cursor: pointer
 }
+.search-container{
+  position: relative
+}
+.search-container .search-results{
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  z-index: 999;
+}

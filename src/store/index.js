@@ -245,7 +245,18 @@ const Store = new Vuex.Store({
             console.log(error)
           }
         })
-    }
+    },
+    getAdsListIndex ({commit}, params) {
+      axios.get(API.index, {}, axiosHeaders.basic)
+        .then(function (response) {
+          if (response.status === 200) {
+            commit('setAdsList', response.data)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
   }
 })
 
