@@ -94,7 +94,7 @@ export default {
         { id: 1, icon: 'face', title: 'Sign up', link: '/register' },
         { id: 2, icon: 'lock_open', title: 'Sign in', link: '/login' }
       ]
-      if (this.userInfo.token !== null && this.userInfo.token !== '') {
+      if (!!this.userInfo.token) {
         menuItems = [
           { id: 3, icon: 'add', title: 'Add ads', link: '/new' },
           { id: 4, icon: 'folder', title: 'All categories', link: '/products' }
