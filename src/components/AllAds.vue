@@ -30,6 +30,15 @@
                       </v-list>
                     </v-flex>
                   </v-layout>
+                  <app-filters
+                  :filterType="'city'"
+                  :title="'Choose city'"
+                  :citiesArray="Object.values(dataConfig.cities)"
+                  ></app-filters>
+                  <app-filters
+                    :filterType="'custom'"
+                    :title="'Filters'"
+                  ></app-filters>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -45,8 +54,8 @@
                   <v-flex xs12 sm10>
                     <div class="display-1 teal--text">All ads</div>
                   </v-flex>
-                  <v-flex xs12 sm2>
-                    <app-sort></app-sort>
+                  <v-flex xs12 sm2 >
+                    <app-sort @citiesEvent="citiesEvent" :chooseCities="chooseCities"></app-sort>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -73,7 +82,8 @@ export default {
   },
   data: () => ({
     userSort: '',
-    limitNumber: 8
+    limitNumber: 8,
+    chooseCities: []
   }),
   computed: {
     ...mapState({
@@ -94,6 +104,9 @@ export default {
       if (this.$store.state.adsList.length < this.limitNumber) {
         this.hidePagination = true
       }
+    },
+    citiesEvent () {
+      this.chooseCities = this.$event
     }
   }
 }
