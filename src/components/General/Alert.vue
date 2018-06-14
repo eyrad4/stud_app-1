@@ -2,7 +2,7 @@
   <v-alert
     :type="alertType"
     dismissible
-    @input="onClose"
+    @input="close"
     :value="true"
     transition="scale-transition"
   >
@@ -27,7 +27,7 @@ export default {
     }
   },
   methods: {
-    onClose () {
+    close () {
       this.$emit('dismissed')
     }
   }
