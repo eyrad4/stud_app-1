@@ -221,9 +221,9 @@ const Store = new Vuex.Store({
             sort: params.sort,
             category: params.currentCategory,
             limit: params.display,
-            cities: params.cities,
-            f_vip: params.vip,
-            f_my: params.my
+            f_cities: (params.filters) ? params.filters.f_cities : '',
+            f_vip: (params.filters) ? params.filters.f_vip : '',
+            f_my: (params.filters) ? params.filters.f_my : ''
           }
         }
       }

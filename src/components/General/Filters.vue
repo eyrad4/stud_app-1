@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-layout v-if="filterType === 'city'">
+    <v-layout>
       <v-flex>
-        <div class="title grey--text mb-3">{{ title }}</div>
+        <div class="title grey--text mb-3">Choose city</div>
         <v-list>
           <v-list-tile
             v-for="city in citiesArray"
@@ -10,19 +10,19 @@
           >
             <v-list-tile-content>
               <v-checkbox
-                v-model="chooseCities"
+                v-model="f_cities"
                 :label="city.name"
                 :value="city.id"
-                @change="filterByCities"
+                @change="filter"
               ></v-checkbox>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
       </v-flex>
     </v-layout>
-    <v-layout v-if="filterType === 'custom'">
+    <v-layout>
       <v-flex>
-        <div class="title grey--text mb-3">{{ title }}</div>
+        <div class="title grey--text mb-3">Choose filters</div>
         <v-list>
           <v-list-tile>
             <v-list-tile-content>
@@ -30,7 +30,7 @@
                 v-model="f_vip"
                 label="Show vip ads"
                 value="true"
-                @change="filterVip"
+                @change="filter"
               ></v-checkbox>
             </v-list-tile-content>
           </v-list-tile>
@@ -40,7 +40,7 @@
                 v-model="f_my"
                 label="Show my ads"
                 value="true"
-                @change="filterMy"
+                @change="filter"
               ></v-checkbox>
             </v-list-tile-content>
           </v-list-tile>
@@ -53,33 +53,26 @@
 <script>
 export default {
   props: {
-    filterType: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
     citiesArray: {
       type: [Array, Object]
-    }
+    },
+    currentCategory: [Number, String]
   },
   data: () => ({
-    chooseCities: [],
+    f_cities: [],
     f_vip: '',
-    f_my: ''
+    f_my: '',
+    filters: []
   }),
   methods: {
-    filterByCities () {
-      this.$store.dispatch('getAdsList', {cities: this.chooseCities})
-      this.$emit('citiesEvent', this.chooseCities)
-    },
-    filterVip () {
-      if (this.f_vip === 'true') this.$store.dispatch('getAdsList', {vip: this.f_vip})
-    },
-    filterMy () {
-      if (this.f_my === 'true') this.$store.dispatch('getAdsList', {my: this.$store.state.user.id})
+    filter () {
+      this.filters = {
+        f_cities: this.f_cities,
+        f_vip: this.f_vip,
+        f_my: this.f_my
+      }
+      this.$store.dispatch('getAdsList', {currentCategory: this.currentCategory, filters: this.filters})
+      this.$emit('filters', this.filters)
     }
   }
 }

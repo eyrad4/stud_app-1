@@ -14,7 +14,7 @@
 export default {
   props: {
     currentCategory: [Number, String],
-    chouseCities: Array
+    chooseFilters: [Array, Object]
   },
   data: () => ({
     sortList: [
@@ -27,8 +27,8 @@ export default {
   }),
   methods: {
     sortUser () {
-      console.log(this.chouseCities)
-      this.$store.dispatch('getAdsList', {sort: this.userSort, currentCategory: this.currentCategory, cities: this.chouseCities})
+      console.log(this.chooseFilters)
+      this.$store.dispatch('getAdsList', {sort: this.userSort, currentCategory: this.currentCategory, filters: this.chooseFilters})
     }
   }
 }
