@@ -52,7 +52,7 @@
               </v-container>
               <v-container>
                 <app-adslist :adsList="Object.values(adsList)"></app-adslist>
-                <div class="text-xs-center" v-if="hidePagination == true">
+                <div class="text-xs-center" v-if="hidePagination === true">
                   <v-btn color="teal" dark @click="loadMore">Load more</v-btn>
                 </div>
               </v-container>
@@ -80,7 +80,7 @@ export default {
       dataConfig: 'dataConfig'
     }),
     adsList () {
-      return this.$store.state.adsList.slice(0, this.limitNumber)
+      return this.$store.getters.adsListLimitShow(this.limitNumber)
     },
     hidePagination () {
       if (this.$store.state.adsList.length > this.limitNumber) {
@@ -91,7 +91,7 @@ export default {
   methods: {
     loadMore () {
       this.limitNumber = this.limitNumber + 8
-      if (this.$store.state.adsList.length < this.limitNumber) {
+      if (this.adsList < this.limitNumber) {
         this.hidePagination = true
       }
     }

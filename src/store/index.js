@@ -37,7 +37,15 @@ const Store = new Vuex.Store({
     },
     ad: '',
     adsList: '',
-    sort: 'Date DESC'
+    sort: 'Date DESC',
+    sortList: [
+      { value: 'Date ASC' },
+      { value: 'Date DESC' },
+      { value: 'Price ASC' },
+      { value: 'Price DESC' }
+    ],
+    sort: 'Date DESC',
+    searchResult: ''
   },
   mutations: {
     setAlert (state, params) {
@@ -48,6 +56,9 @@ const Store = new Vuex.Store({
     },
     setSuccess (state) {
       state.success = true
+    },
+    clearSuccess (state) {
+      state.success = false
     },
     setUser (store, params) {
       store.user = {
@@ -96,6 +107,9 @@ const Store = new Vuex.Store({
   actions: {
     clearAlert ({commit}) {
       commit('clearAlert')
+    },
+    clearSuccess ({commit}) {
+      commit('clearSuccess')
     },
     signUp ({commit}, params) {
       commit('clearAlert')
@@ -256,7 +270,14 @@ const Store = new Vuex.Store({
         .catch(function (error) {
           console.log(error)
         })
-    },
+    }
+  },
+  getters: {
+    adsListLimitShow (state) {
+      return (limitNumber) => {
+        return state.adsList.slice(0, limitNumber)
+      }
+    }
   }
 })
 
