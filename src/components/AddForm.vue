@@ -23,18 +23,23 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  created () {
+    this.$store.dispatch('clearAlert')
+    this.$store.dispatch('clearSuccess')
+  },
   data: () => ({
-    success: false
   }),
   computed: {
     ...mapState({
       dataConfig: 'dataConfig',
-      alert: 'alert'
+      alert: 'alert',
+      success: 'success'
     })
   },
   methods: {
     dismissed () {
       this.$store.dispatch('clearAlert')
+      this.$store.dispatch('clearSuccess')
     }
   }
 }

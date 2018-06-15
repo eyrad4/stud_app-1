@@ -81,6 +81,8 @@
 <script>
 export default {
   created () {
+    this.$store.dispatch('clearAlert')
+    this.$store.dispatch('clearSuccess')
     if (this.defaultValue) {
       this.id = this.defaultValue.id
       this.name = this.defaultValue.name
@@ -99,7 +101,6 @@ export default {
     defaultValue: [Array, Object]
   },
   data: () => ({
-    success: false,
     valid: true,
     id: '',
     name: '',
@@ -142,6 +143,10 @@ export default {
           user_id: this.$store.state.user.id
         })
       }
+    },
+    dismissed () {
+      this.$store.dispatch('clearAlert')
+      this.$store.dispatch('clearSuccess')
     }
   }
 }
