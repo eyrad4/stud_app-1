@@ -13,7 +13,8 @@
 <script>
 export default {
   props: {
-    currentCategory: [Number, String]
+    currentCategory: [Number, String],
+    chooseFilters: [Array, Object]
   },
   data: () => ({
     sortList: [
@@ -26,7 +27,8 @@ export default {
   }),
   methods: {
     sortUser () {
-      this.$store.dispatch('getAdsList', {sort: this.userSort, currentCategory: this.currentCategory})
+      console.log(this.chooseFilters)
+      this.$store.dispatch('getAdsList', {sort: this.userSort, currentCategory: this.currentCategory, filters: this.chooseFilters})
     }
   }
 }

@@ -37,13 +37,13 @@ const Store = new Vuex.Store({
     },
     ad: '',
     adsList: '',
-    sort: 'Date DESC',
     sortList: [
       { value: 'Date ASC' },
       { value: 'Date DESC' },
       { value: 'Price ASC' },
       { value: 'Price DESC' }
     ],
+    sort: 'Date DESC',
     searchResult: ''
   },
   mutations: {
@@ -226,13 +226,16 @@ const Store = new Vuex.Store({
           limit: ''
         }
       }
-      if (params) {
+      if (Object.keys(params).length >= 1) {
         commit('setSort', params.sort)
         data = {
           params: {
             sort: params.sort,
             category: params.currentCategory,
-            limit: params.display
+            limit: params.display,
+            f_cities: (params.filters) ? params.filters.f_cities : '',
+            f_vip: (params.filters) ? params.filters.f_vip : '',
+            f_my: (params.filters) ? params.filters.f_my : ''
           }
         }
       }

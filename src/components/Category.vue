@@ -31,6 +31,11 @@
                       </v-list>
                     </v-flex>
                   </v-layout>
+                  <app-filters
+                    :citiesArray="Object.values(dataConfig.cities)"
+                    :currentCategory="currentCategory"
+                    @filters="filtersEvent"
+                  ></app-filters>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -47,7 +52,10 @@
                     <div class="display-1 teal--text">{{ categoryName.name }}</div>
                   </v-flex>
                   <v-flex xs12 sm2>
-                    <app-sort :currentCategory="currentCategory"></app-sort>
+                    <app-sort
+                      :currentCategory="currentCategory"
+                      :chooseFilters="chooseFilters"
+                    ></app-sort>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -72,6 +80,10 @@ export default {
   created () {
     this.$store.dispatch('getAdsList', {currentCategory: this.currentCategory})
   },
+  data: () => ({
+    limitNumber: 8,
+    chooseFilters: []
+  }),
   computed: {
     ...mapState({
       dataConfig: 'dataConfig'
@@ -106,6 +118,12 @@ export default {
       if (this.adsList < this.limitNumber) {
         this.hidePagination = true
       }
+    },
+    filterByCities () {
+      this.$store.dispatch('getAdsList', {cities: this.chouseCities, currentCategory: this.currentCategory})
+    },
+    filtersEvent ($event) {
+      this.chooseFilters = $event
     }
   }
 }

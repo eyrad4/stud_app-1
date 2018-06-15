@@ -22,7 +22,7 @@
               v-for="category in dataConfig.categories"
               :key="category.id"
             >
-              <v-card :to="'/category/' + category.id">
+              <v-card :to="'/products/' + category.id">
                 <v-card-text>
                   <div class="title">{{ category.name }}</div>
                 </v-card-text>
@@ -40,7 +40,7 @@
               <v-container>
                 <v-layout row>
                   <v-flex xs12 sm10>
-                    <div class="display-1 teal--text">Latest ad</div>
+                    <div class="display-1 teal--text">Latest vip ad</div>
                   </v-flex>
                 </v-layout>
               </v-container>
