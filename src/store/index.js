@@ -44,7 +44,6 @@ const Store = new Vuex.Store({
       { value: 'Price ASC' },
       { value: 'Price DESC' }
     ],
-    sort: 'Date DESC',
     searchResult: ''
   },
   mutations: {
