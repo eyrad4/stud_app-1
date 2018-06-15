@@ -48,6 +48,10 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  created () {
+    this.$store.dispatch('clearAlert')
+    this.$store.dispatch('clearSuccess')
+  },
   data: () => ({
     valid: true,
     email: '',
@@ -73,6 +77,8 @@ export default {
     },
     dismissed () {
       this.$store.dispatch('clearAlert')
+      this.$store.dispatch('clearSuccess')
+      this.$router.push('/')
     }
   }
 }
