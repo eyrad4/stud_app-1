@@ -4,7 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 import store from '@/store'
+import AlertComponent from './components/General/Alert.vue'
+
+Vue.use(Vuetify)
+Vue.component('app-alert', AlertComponent)
 
 Vue.config.productionTip = false
 

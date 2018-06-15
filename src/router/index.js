@@ -1,13 +1,23 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import AddsList from '@/components/AddsList'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
+import Login from '@/components/Auth/Login'
+import Register from '@/components/Auth/Register'
 import SingleAdd from '@/components/SingleAdd'
 import AddForm from '@/components/AddForm'
 import Page404 from '@/components/Page404'
+import store from '../store'
 
 Vue.use(Router)
+
+const checkAuth = (to, from, next) => {
+  let userInfo = store.getters.userInfo
+  if (userInfo.token) {
+    next()
+  } else {
+    next('/login')
+  }
+}
 
 export default new Router({
   routes: [
@@ -27,14 +37,25 @@ export default new Router({
       component: Register
     },
     {
-      path: '/add:id(\\d+)',
-      name: 'SingleAdd',
-      component: SingleAdd
+      path: '/products',
+      name: 'AllAds',
+      component: AllAds
     },
     {
-      path: '/:id(\\d+)',
+      path: '/products/:category(\\d+)',
+      name: 'Category',
+      component: Category
+    },
+    {
+      path: '/products/:category(\\d+)/:id(\\d+)',
+      name: 'SingleAd',
+      component: SingleAd
+    },
+    {
+      path: '/new',
       name: 'AddForm',
-      component: AddForm
+      component: AddForm,
+      beforeEnter: checkAuth
     },
     {
       path: '*',
